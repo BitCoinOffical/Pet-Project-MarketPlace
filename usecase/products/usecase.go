@@ -5,17 +5,19 @@ import "main.go/internal/domain/products"
 type UseCases struct {
 	Create      *PostProductUseCase
 	GetById     *GetByIdProductUseCase
+	GetAll      *GetAllProductUseCase
 	PutByID     *PutByIDProductUseCase
 	DeletedByID *DeletedByIDProductUseCase
-	Patch       *PatchProductUseCase
+	PatchById   *PatchProductUseCase
 }
 
 func NewProductUseCase(Repository products.Repository) *UseCases {
 	return &UseCases{
 		Create:      NewPostProductUseCase(Repository),
 		GetById:     NewGetByIdProductUseCase(Repository),
+		GetAll:      NewGetAllUseCase(Repository),
 		PutByID:     NewPutByIdProductUseCase(Repository),
 		DeletedByID: NewDeletedByIDProductUseCase(Repository),
-		Patch:       NewPatchProductUseCase(Repository),
+		PatchById:   NewPatchProductUseCase(Repository),
 	}
 }

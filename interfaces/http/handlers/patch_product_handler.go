@@ -37,7 +37,7 @@ func (uc *PatchProductHandler) PatchProductHandler(w http.ResponseWriter, r *htt
 		http.Error(w, "validation failed: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err := uc.usecase.Patch.PatchProductUseCase(r.Context(), id, &ProductPatchDTO); err != nil {
+	if err := uc.usecase.PatchById.PatchProductUseCase(r.Context(), id, &ProductPatchDTO); err != nil {
 		http.Error(w, "Patch failed: "+err.Error(), http.StatusInternalServerError)
 		return
 	}

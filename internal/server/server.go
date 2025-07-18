@@ -18,8 +18,8 @@ func Run() error {
 	if err := runMigrations(db); err != nil {
 		return err
 	}
-	productRepo := postgress.NewProductRepo(db)
-	productUsecase := usecase.NewProductUseCase(productRepo)
+	ProductRepo := postgress.NewProductRepo(db)
+	productUsecase := usecase.NewProductUseCase(ProductRepo)
 	handler := handlers.NewHandler(productUsecase)
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /products", handler.Post.PostProductHandler)

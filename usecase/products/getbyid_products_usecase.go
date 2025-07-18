@@ -14,5 +14,5 @@ func NewGetByIdProductUseCase(repo products.Repository) *GetByIdProductUseCase {
 	return &GetByIdProductUseCase{Repo: repo}
 }
 func (uc *GetByIdProductUseCase) GetById(ctx context.Context, id int) (*products.Product, error) {
-	return uc.Repo.Get(ctx, id)
+	return uc.Repo.GetByIdRepo(ctx, id)
 }
