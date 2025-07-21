@@ -37,7 +37,7 @@ func (h *PutProductHandler) PutByIdProductHandler(w http.ResponseWriter, r *http
 		http.Error(w, "Invalid JSON: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err := h.usecase.Create.PutByID(r.Context(), id, ProductPutDTO); err != nil {
+	if err := h.usecase.PutByID.PutByID(r.Context(), id, ProductPutDTO); err != nil {
 		http.Error(w, "Failed to update product: "+err.Error(), http.StatusInternalServerError)
 		return
 	}

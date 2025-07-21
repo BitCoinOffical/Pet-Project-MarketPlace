@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	_ "github.com/lib/pq"
+
 	"main.go/infrastructure/postgress"
 	"main.go/interfaces/http/handlers"
 	usecase "main.go/usecase/products"
@@ -23,6 +25,7 @@ func Run() error {
 	handler := handlers.NewHandler(productUsecase)
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /products", handler.Post.PostProductHandler)
+	mux.HandleFunc("GET /products", handler.GetAll.GetAllHandler)
 	mux.HandleFunc("GET /products/", handler.GetByID.GetByIdProductHandler)
 	mux.HandleFunc("PUT /products/", handler.PutByID.PutByIdProductHandler)
 	mux.HandleFunc("DELETE /products/", handler.DeletedByID.DeletedByIDProductHandler)

@@ -23,8 +23,8 @@ func BuildGetAllQuery(filter *dto.ProductFilterDTO) (string, string, []interface
 	}
 
 	if filter.Search != nil {
-		query = append(query, fmt.Sprintf("name ILIKE '%' || $%d || '%'", num))
-		args = append(args, filter.Search)
+		query = append(query, fmt.Sprintf("name ILIKE $%d", num))
+		args = append(args, "%"+*filter.Search+"%")
 		num++
 	}
 

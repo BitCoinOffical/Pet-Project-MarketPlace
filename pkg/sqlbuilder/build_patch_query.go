@@ -36,5 +36,6 @@ func BuildPatchQuery(id int, product *dto.ProductPatchDTO) ([]string, []interfac
 	if len(set) == 0 {
 		return nil, nil, 0, errors.New("empty set")
 	}
+	args = append(args, id)
 	return set, args, num, nil
 }

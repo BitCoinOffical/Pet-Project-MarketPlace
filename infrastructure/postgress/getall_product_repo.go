@@ -34,7 +34,7 @@ func (db *GetAll) GetAll(ctx context.Context, filter *dto.ProductFilterDTO) ([]d
 		return nil, 0, err
 	}
 	var allproduct []dto.ProductResponse
-
+	defer rows.Close()
 	for rows.Next() {
 		var product dto.ProductResponse
 		if err := rows.Scan(&product.ID, &product.Name, &product.Category, &product.Price, &product.InStock); err != nil {
@@ -42,9 +42,8 @@ func (db *GetAll) GetAll(ctx context.Context, filter *dto.ProductFilterDTO) ([]d
 		}
 		allproduct = append(allproduct, product)
 	}
-	if rows.Err() != nil {
+	if err := rows.Err(); err != nil {
 		return nil, 0, err
 	}
-
 	return allproduct, totalCount, nil
 }

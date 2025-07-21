@@ -22,6 +22,7 @@ func (h *PostProductHandler) PostProductHandler(w http.ResponseWriter, r *http.R
 	var validate = validator.New()
 	var ProductCreateDTO dto.ProductCreateDTO
 
+
 	if err := json.NewDecoder(r.Body).Decode(&ProductCreateDTO); err != nil {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return

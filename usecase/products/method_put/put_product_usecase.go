@@ -1,4 +1,4 @@
-package usecase
+package put
 
 import (
 	"context"
@@ -15,7 +15,7 @@ func NewPutByIdProductUseCase(repo products.Repository) *PutByIDProductUseCase {
 	return &PutByIDProductUseCase{Repo: repo}
 }
 
-func (uc *PostProductUseCase) PutByID(ctx context.Context, id int, dto dto.ProductPutDTO) error {
+func (uc *PutByIDProductUseCase) PutByID(ctx context.Context, id int, dto dto.ProductPutDTO) error {
 	product := &products.Product{
 		Name:     dto.Name,
 		Category: dto.Category,

@@ -54,7 +54,7 @@ func (uc *GetAllHandler) GetAllHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	products, total_count, err := uc.usecase.GetAll.GetAllUseCase(r.Context(), category, search, page, min_price, max_price)
+	products, total_count, err := uc.usecase.GetAll.GetAll(r.Context(), category, search, page, min_price, max_price)
 	if err != nil {
 		http.Error(w, "Failed get products: "+err.Error(), http.StatusInternalServerError)
 		return

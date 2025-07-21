@@ -21,9 +21,9 @@ func NewPatchByIdProductRepo(db *sql.DB) *PatchByIdProductRepo {
 func (db *PatchByIdProductRepo) Patch(ctx context.Context, id int, product *dto.ProductPatchDTO) error {
 	set, args, num, err := sqlbuilder.BuildPatchQuery(id, product)
 	if err != nil {
-		return nil
+		return err
 	}
-	query := fmt.Sprintf(`UPDATE products SET %s WHERE id = $%d"`, strings.Join(set, ", "), num)
+	query := fmt.Sprintf(`UPDATE products SET %s WHERE id = $%d`, strings.Join(set, ", "), num)
 	res, err := db.DB.ExecContext(ctx, query, args...)
 	if err != nil {
 		return err
