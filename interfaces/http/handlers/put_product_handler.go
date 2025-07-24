@@ -29,12 +29,14 @@ func (h *PutProductHandler) PutByIdProductHandler(w http.ResponseWriter, r *http
 		http.Error(w, "id convert error: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err := validate.Struct(ProductPutDTO); err != nil {
-		http.Error(w, "Validation failed: "+err.Error(), http.StatusBadRequest)
-		return
-	}
+
 	if err := json.NewDecoder(r.Body).Decode(&ProductPutDTO); err != nil {
 		http.Error(w, "Invalid JSON: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if err := validate.Struct(ProductPutDTO); err != nil {
+		http.Error(w, "Validation failed: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 	if err := h.usecase.PutByID.PutByID(r.Context(), id, ProductPutDTO); err != nil {
