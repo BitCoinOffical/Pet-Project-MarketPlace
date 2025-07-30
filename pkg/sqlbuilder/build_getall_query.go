@@ -2,9 +2,8 @@ package sqlbuilder
 
 import (
 	"fmt"
+	"myapp/internal/interfaces/http/dto"
 	"strings"
-
-	"main.go/interfaces/http/dto"
 )
 
 func BuildGetAllQuery(filter *dto.ProductFilterDTO) (string, string, []interface{}, error) {

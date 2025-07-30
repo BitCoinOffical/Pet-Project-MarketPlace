@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"main.go/internal/server"
+	"myapp/cmd/server"
 )
 
 func main() {

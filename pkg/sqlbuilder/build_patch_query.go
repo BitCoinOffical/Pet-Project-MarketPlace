@@ -3,8 +3,7 @@ package sqlbuilder
 import (
 	"errors"
 	"fmt"
-
-	"main.go/interfaces/http/dto"
+	"myapp/internal/interfaces/http/dto"
 )
 
 func BuildPatchQuery(id int, product *dto.ProductPatchDTO) ([]string, []interface{}, int, error) {
