@@ -24,7 +24,7 @@ func (m *mockRepo) Delete(ctx context.Context, id int) error {
 }
 func (m *mockRepo) GetAll(ctx context.Context, filter *dto.ProductFilterDTO) ([]dto.ProductResponse, int, error) {
 	m.filter = filter
-	return m.filters, m.num, m.err
+	return m.filters, len(m.filters), m.err
 }
 func (m *mockRepo) GetByIdRepo(ctx context.Context, id int) (*products.Product, error) {
 	m.num = id

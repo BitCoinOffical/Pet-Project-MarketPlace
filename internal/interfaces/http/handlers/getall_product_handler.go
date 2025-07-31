@@ -1,23 +1,22 @@
 package handlers
 
 import (
+	cache "myapp/infrastructure/cache"
 	"myapp/internal/interfaces/http/dto"
 	"net/http"
 	"strconv"
 
-	usecase "myapp/internal/usecase/products"
 	"myapp/pkg/httphelper"
 )
 
 type GetAllHandler struct {
-	usecase *usecase.UseCases
+	CacheUseCase *cache.GetAllCashe
 }
 
-func NewGetAllHandler(usecase *usecase.UseCases) *GetAllHandler {
-	return &GetAllHandler{usecase: usecase}
+func NewGetAllHandler(cu *cache.GetAllCashe) *GetAllHandler {
+	return &GetAllHandler{CacheUseCase: cu}
 }
-
-func (uc *GetAllHandler) GetAllHandler(w http.ResponseWriter, r *http.Request) {
+func (gah *GetAllHandler) GetAllHandler(w http.ResponseWriter, r *http.Request) {
 	var min_price, max_price float64
 	var page = 1
 
@@ -54,15 +53,20 @@ func (uc *GetAllHandler) GetAllHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	products, total_count, err := uc.usecase.GetAll.GetAll(r.Context(), category, search, page, min_price, max_price)
+	chval, products, total_count, err := gah.CacheUseCase.GetDataWithCache(r.Context(), category, search, page, min_price, max_price)
 	if err != nil {
 		http.Error(w, "Failed get products: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	res := &dto.ProductList{
-		Items:      products,
-		TotalCount: total_count,
+	var res interface{}
+	if products != nil {
+		res = &dto.ProductList{
+			Items:      products,
+			TotalCount: total_count,
+		}
+	}
+	if chval != "" {
+		res = chval
 	}
 
 	if err := httphelper.RespondJSON(w, http.StatusOK, res); err != nil {

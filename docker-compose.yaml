@@ -1,0 +1,31 @@
+
+
+services:
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 5286
+      POSTGRES_DB: productsdb
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    image: pet-project-marker
+    ports: 
+      - "8080:8080"
+    working_dir: /app
+    command: ./main
+    depends_on:
+      - db
+      - redis
+    environment:
+      REDIS_ADDR: redis:6379
+      DATABASE_URL: postgres://postgres:5286@db:5432/productsdb

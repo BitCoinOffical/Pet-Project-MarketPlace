@@ -3,6 +3,7 @@ package server
 import (
 	"database/sql"
 	"log"
+	"myapp/infrastructure/cache"
 	"myapp/infrastructure/database"
 	"myapp/internal/interfaces/http/handlers"
 	usecase "myapp/internal/usecase/products"
@@ -19,9 +20,14 @@ func Run() error {
 	if err := runMigrations(db); err != nil {
 		return err
 	}
+	rdb, err := cache.Redisinit()
+	if err != nil {
+		return err
+	}
 	ProductRepo := database.NewProductRepo(db)
 	productUsecase := usecase.NewProductUseCase(ProductRepo)
-	handler := handlers.NewHandler(productUsecase)
+	productCache := cache.NewGetAllCash(productUsecase, rdb)
+	handler := handlers.NewHandler(productUsecase, productCache)
 	mux := http.NewServeMux()
 	mux.HandleFunc("POST /products", handler.Post.PostProductHandler)
 	mux.HandleFunc("GET /products", handler.GetAll.GetAllHandler)

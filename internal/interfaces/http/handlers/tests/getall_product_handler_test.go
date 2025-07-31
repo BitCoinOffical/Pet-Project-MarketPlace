@@ -7,12 +7,22 @@ import (
 	"strings"
 	"testing"
 
+	"myapp/infrastructure/cache"
 	"myapp/internal/interfaces/http/dto"
 	"myapp/internal/interfaces/http/handlers"
 	usecase "myapp/internal/usecase/products"
+
+	"github.com/alicebob/miniredis/v2"
+	"github.com/redis/go-redis/v9"
 )
 
 func TestGetAll(t *testing.T) {
+	s := miniredis.RunT(t)
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     s.Addr(),
+		Password: "",
+		DB:       0,
+	})
 	mock := &mockRepo{
 		filters: []dto.ProductResponse{
 			{
@@ -23,12 +33,12 @@ func TestGetAll(t *testing.T) {
 				InStock:  true,
 			},
 		},
-		num: 1,
 		err: nil,
 	}
 
-	uscases := &usecase.UseCases{GetAll: usecase.NewGetAllUseCase(mock)}
-	handler := handlers.NewGetAllHandler(uscases)
+	usecase := usecase.NewProductUseCase(mock)
+	cache := cache.NewGetAllCash(usecase, rdb)
+	handler := handlers.NewGetAllHandler(cache)
 
 	req := httptest.NewRequest(http.MethodGet, "/products/", nil)
 	w := httptest.NewRecorder()
