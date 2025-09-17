@@ -13,7 +13,7 @@ import (
 )
 
 func Run() error {
-	db, err := sql.Open("postgres", "host=db port=5432 user=postgres password=5286 dbname=productsdb sslmode=disable")
+	db, err := sql.Open("postgres", "host=db port=5433 user=postgres password=5286 dbname=productsdb sslmode=disable")
 	if err != nil {
 		return err
 	}
@@ -29,6 +29,7 @@ func Run() error {
 	productCache := cache.NewGetAllCash(productUsecase, rdb)
 	handler := handlers.NewHandler(productUsecase, productCache)
 	mux := http.NewServeMux()
+	mux.Handle("/", http.FileServer(http.Dir("./cmd/server/frontend")))
 	mux.HandleFunc("POST /products", handler.Post.PostProductHandler)
 	mux.HandleFunc("GET /products", handler.GetAll.GetAllHandler)
 	mux.HandleFunc("GET /products/", handler.GetByID.GetByIdProductHandler)
